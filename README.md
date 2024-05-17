@@ -41,6 +41,11 @@ MySQL Workbench는 MySQL을 편리하게 사용하기 위한 그래픽 인터페
 설치는 아래 링크에서 가능하다.  
 https://dev.mysql.com/downloads/workbench/
 
+## 따옴표
+
+SQL에서는 큰따옴표를 사용하지않고 작은 따옴표를 사용한다.  
+MySQL에서는 큰따옴표도 작동은 하지만 SQL을 이용하는 다른 DBMS에서는 작동 안할수 있으니 작은 따옴표를 쓸 수 있도록 습관을 들여야함
+
 ## 데이터베이스 표시하기
 
 ```SQL
@@ -109,4 +114,109 @@ DESC <table_name>;
 
 ```SQL
 DROP TABLE <table_name>;
+```
+
+## 데이터 삽입
+
+```SQL
+INSERT INTO <table_name>(<column_name>)
+VALUES (value);
+--example
+INSERT INTO cats(name, age)
+VALUES ('나비', 1);
+```
+
+## 데이터 조회
+
+```SQL
+SELECT * FROM <table_name>;
+--example
+SELECT * FROM cats;
+```
+
+## 데이터 다중 삽입
+
+```SQL
+INSERT INTO <table_name>(<column_name>)
+VALUES
+  (value),
+  (value),
+  (value);
+--example
+INSERT INTO cats (name, age)
+VALUES
+  ('Meatball', 5),
+  ('Turkey', 1),
+  ('Potato Face', 15);
+```
+
+## NULL, NOT_NULL
+
+기본값은 NULL로 설정되나 Table 생성 시 NOT NULL을 선언해줄수 있다.
+
+```SQL
+CREATE TABLE <table_name>
+(
+  <column_name> <data_type> NOT NULL,
+  <column_name> <data_type> NOT NULL
+);
+--example
+CREATE TABLE cats2
+(
+  name VARCHAR(100) NOT NULL,
+  age INT NOT NULL
+);
+```
+
+## DEFAULT Values
+
+```SQL
+CREATE TABLE <table_name>
+(
+  <column_name> <data_type> DEFAULT <value>,
+  <column_name> <data_type> DEFAULT <value>
+);
+--example
+CREATE TABLE cats3
+(
+  name VARCHAR(100) DEFAULT 'mystery',
+  age INT DEFAULT 99
+);
+```
+
+## Key
+
+흔히 말하는 고유 식별자임(Primary Key, PK)
+
+```SQL
+CREATE TABLE <table_name>
+(
+  <column_name> <data_type> PRIMARY KEY,
+  <column_name> <data_type> DEFAULT <value>,
+  <column_name> <data_type> DEFAULT <value>
+);
+--example
+CREATE TABLE unique_cats (
+	cat_id INT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  age INT NOT NULL
+);
+--example2
+CREATE TABLE unique_cats2 (
+	cat_id INT,
+  name VARCHAR(100) NOT NULL,
+  age INT NOT NULL,
+  PRIMARY KEY (cat_id)
+);
+```
+
+## AUTO_INCREMENT
+
+```SQL
+CREATE TABLE unique_cats3 (
+	cat_id INT AUTO_INCREMENT,
+  name VARCHAR(100),
+  age INT,
+  PRIMARY KEY (cat_id)
+);
 ```
