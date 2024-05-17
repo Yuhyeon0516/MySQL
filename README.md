@@ -40,3 +40,73 @@ MySQL Workbench는 MySQL을 편리하게 사용하기 위한 그래픽 인터페
 
 설치는 아래 링크에서 가능하다.  
 https://dev.mysql.com/downloads/workbench/
+
+## 데이터베이스 표시하기
+
+```SQL
+SHOW DATABASES;
+```
+
+## 데이터베이스 생성하기
+
+```SQL
+CREATE DATABASE <name>;
+```
+
+## 데이터베이스 삭제하기
+
+```SQL
+DROP DATABASE <name>;
+```
+
+## 데이터베이스 이용하기
+
+```SQL
+-- 사용할 데이터베이스 선택
+USE <database name>;
+-- 선택된 데이터베이스 출력
+SELECT database();
+```
+
+## 테이블
+
+데이터의 형식과 형태를 작성하고, 그 형태를 따르는 데이터 컬렉션을 뜻함.  
+즉 데이터베이스 안에서 구조화된 형식으로 관련된 데이터를 담고있는 것을 테이블이라고함.
+
+## 데이터 타입
+
+수많은 데이터 타입이 존재하기 때문에 이를 전부 파악하고 있는것도 좋겠지만 Docs에 더 자세히 설명이 나와있으니 아래 링크를 참조.  
+https://dev.mysql.com/doc/refman/8.3/en/data-types.html
+
+## 테이블 생성하기
+
+```SQL
+CREATE TABLE <table_name>
+(
+  <column_name> <data_type>,
+  <column_name> <data_type>
+);
+--example
+CREATE TABLE cats
+(
+  name VARCHAR(100),
+  age INT
+);
+```
+
+## 테이블 검사
+
+```SQL
+-- table의 현재 리스트를 가져옴
+SHOW TABLES;
+-- table_name column의 정보를 가져옴
+SHOW COLUMNS FROM <table_name>;
+DESCRIBE <table_name>;
+DESC <table_name>;
+```
+
+## 테이블 삭제
+
+```SQL
+DROP TABLE <table_name>;
+```
