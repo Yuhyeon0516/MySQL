@@ -414,3 +414,79 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
   -- '  pickle  '의 공백 제거(pickle)
   SELECT TRIM('  pickle  ');
   ```
+
+## 정교화
+
+- DISTINCT
+
+  중복된 데이터를 제거해줌.  
+  JavaScript, Python, Java, C++ 등의 프로그래밍 언어의 자료구조인 Set와 동일한 개념.
+
+  ```SQL
+  -- books 테이블의 author_lname이 중복되지 않게 선택
+  SELECT DISTINCT author_lname FROM books;
+  -- books 테이블의 author_fname, ' ', author_lname을 CONCAT으로 병합한 결과를 중복되지 않게 선택
+  SELECT DISTINCT CONCAT(author_fname,' ', author_lname) FROM books;
+  -- books 테이블의 author_fname, author_lname 모두 중복되지 않게 선택
+  SELECT DISTINCT author_fname, author_lname FROM books;
+  ```
+
+- ORDER BY
+
+  ORDER BY는 기본적으로 ASCENDING 즉 내림차순으로 되어있음.
+
+  ```SQL
+  -- books 테이블의 행을 author_lname의 내림차순으로 정렬 후 선택
+  SELECT * FROM books ORDER BY author_lname;
+  -- books 테이블의 행을 author_lname의 오름차순으로 정렬 후 선택
+  SELECT * FROM books ORDER BY author_lname DESC;
+  -- books 테이블의 행을 released_year의 내림차순으로 정렬 후 선택
+  SELECT * FROM books ORDER BY released_year;
+  -- books 테이블의 book_id, author_fname, author_lname, pages를 선택 후 2번째 선택한 author_fname을 기준으로 오름차순 정렬
+  SELECT book_id, author_fname, author_lname, pages FROM books ORDER BY 2 desc;
+  -- books 테이블의 book_id, author_fname, author_lname, pages를 선택 후 author_lname을 기준으로 정렬 후 author_fname을 기준으로 다시 정렬
+  SELECT book_id, author_fname, author_lname, pages FROM books ORDER BY author_lname, author_fname;
+  ```
+
+- LIMIT
+
+  반환되는 결과의 수를 정해줌
+
+  ```SQL
+  -- books 테이블의 title 행을 3개 반환
+  SELECT title FROM books LIMIT 3;
+  -- books 테이블의 전체 행을 1개 반환
+  SELECT * FROM books LIMIT 1;
+  -- books 테이블의 title, released_year 행을 released_year을 기준으로 오름차순 정렬 후 5개를 반환
+  SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 5;
+  -- books 테이블의 title, released_year 행을 released_year을 기준으로 오름차순 정렬 후 0번째부터 5개를 반환
+  SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 0,5;
+  -- books 테이블의 title 행을 5번째부터 50개를 반환
+  SELECT title FROM books LIMIT 5, 50;
+  ```
+
+- LIKE
+
+  `WHERE`만 사용하면 주어진 값에 정확하게 일치해야 반환이 되었지만 `LIKE`는 주어진 `WILDCARD`를 포함하는 결과를 반환해줌
+
+  ```SQL
+  -- books 테이블의 title, author_fname, author_lname, pages를 선택하고 author_fname에 'da' 앞뒤에 0개 이상의 글자가 포함되는 행만 반환
+  SELECT title, author_fname, author_lname, pages FROM books WHERE author_fname LIKE '%da%';
+  -- books 테이블의 title, author_fname, author_lname, pages를 선택하고 title에 ':' 앞뒤에 0개 이상의 글자가 포함되는 행만 반환
+  SELECT title, author_fname, author_lname, pages FROM books WHERE title LIKE '%:%';
+  -- books 테이블의 모든 행에 author_fname이 4글자인 행만 반환
+  SELECT * FROM books WHERE author_fname LIKE '____';
+  -- books 테이블의 모든 행에 author_fname이 a를 포함하고 앞뒤에 1개 글자를 추가로 가지고있는 행 즉 a가 가운데에 있고 3글자인 행만 반환
+  SELECT * FROM books WHERE author_fname LIKE '_a_';
+  ```
+
+- ESCAPE
+
+  `%`, `_` 등과 같이 SQL의 규칙이 적용되어 있는 문자는 ESCAPE 즉 역슬래쉬 처리를 해주어 문자라고 인지를 시켜주어야 검색이 가능하다.
+
+  ```SQL
+  -- books 테이블의 모든 행에 title에 '%' 앞뒤로 0개 글자 이상을 포함하고있는 행
+  SELECT * FROM books WHERE title LIKE '%\%%';
+  -- books 테이블의 모든 행에 title에 '_' 앞뒤로 0개 글자 이상을 포함하고있는 행
+  SELECT * FROM books WHERE title LIKE '%\_%';
+  ```
