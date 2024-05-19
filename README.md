@@ -289,3 +289,128 @@ CREATE TABLE unique_cats3 (
   -- cats 테이블의 name이 Egg인 행을 삭제
   DELETE FROM cats WHERE name='Egg';
   ```
+
+## String Functions
+
+수많은 String Function이 있는데 필요할때 아래 링크를 참고하여 찾아서 사용하면 될 것 같다.  
+https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
+
+- CONCAT, CONCAT_WS
+
+  - CONCAT : Combine Data For Cleaner Output
+  - CONCAT_WS : CONCAT With Seperator
+
+  ```SQL
+  -- books 테이블의 author_fname,  ' ',  author_lname을 합친 후 author_name으로 명명함
+  SELECT CONCAT(author_fname,' ', author_lname) AS author_name FROM books;
+  -- books 테이블의 title, author_fname, author_lname을 합치고 seperator로 '-'를 넣어줌
+  SELECT CONCAT_WS('-',title, author_fname, author_lname) FROM books;
+  ```
+
+- SUBSTRING, SUBSTR
+
+  - SUBSTRING : Work With Parts Of Strings
+  - SUBSTR : SUBSTRING의 축약어ㄴ
+
+  ```SQL
+  -- 'Hello World'의 1번째 글짜에서 4글자를 선택(Hell)
+  SELECT SUBSTRING('Hello World', 1, 4);
+  -- 'Hello World'의 7번째 글자에서 끝까지 선택(World)
+  SELECT SUBSTRING('Hello World', 7);
+  -- 'Hello World'의 끝에서 3글자를 선택(rld)
+  SELECT SUBSTRING('Hello World', -3);
+  -- books 테이블의 title 컬럼의 1번째 글자에서 10글자를 선택한 후 'short title'로 명명함
+  SELECT SUBSTRING(title, 1, 10) AS 'short title' FROM books;
+  -- 위 SUBSTRING 명령의 축약어 SUBSTR 사용
+  SELECT SUBSTR(title, 1, 10) AS 'short title' FROM books;
+  ```
+
+- 문자열 함수 조합(CONCAT, SUBSTRING)
+
+  ```SQL
+  -- books 테이블의 title 컬럼 1번째 글자에서 10글자를 선택 후 '...'과 합친 후 'short title'로 명명함
+  SELECT CONCAT
+    (
+      SUBSTRING(title, 1, 10),
+      '...'
+    ) AS 'short title'
+  FROM books;
+  ```
+
+- REPLACE
+
+  ```SQL
+  -- 'Hello World'에서 'Hell'을 '%$#@'로 변경
+  SELECT REPLACE('Hello World', 'Hell', '%$#@');
+  -- 'Hello World'에서 'l'을 '7'로 변경
+  SELECT REPLACE('Hello World', 'l', '7');
+  -- 'Hello World'에서 'o'를 '0'으로 변경
+  SELECT REPLACE('Hello World', 'o', '0');
+  -- 'Hello World'에서 'o'를 '*'로 변경
+  SELECT REPLACE('HellO World', 'o', '*');
+  -- 'cheese bread coffee milk'의 공백을 ' and '로 변경
+  SELECT
+    REPLACE('cheese bread coffee milk', ' ', ' and ');
+  -- books 테이블의 title 컬럼에서 'e'를 '3'으로 변경
+  SELECT REPLACE(title, 'e ', '3') FROM books;
+  -- books 테이블의 title 컬럼에서 공백을 '-'로 변경
+  SELECT REPLACE(title, ' ', '-') FROM books;
+  ```
+
+- REVERSE
+
+  ```SQL
+  -- 'Hello World'를 거꾸로
+  SELECT REVERSE('Hello World');
+  -- 'meow meow'를 거꾸로
+  SELECT REVERSE('meow meow');
+  -- books 테이블의 author_fname을 거꾸로
+  SELECT REVERSE(author_fname) FROM books;
+  -- 'woof'를 거꾸로 한 후 'woof'와 결합
+  SELECT CONCAT('woof', REVERSE('woof'));
+  -- books 테이블의 author_fname을 거꾸로 한 후 author_fname과 결합
+  SELECT CONCAT(author_fname, REVERSE(author_fname)) FROM books;
+  ```
+
+- CHAR_LENGTH
+
+  ```SQL
+  -- 'Hello World'의 글자수를 세어줌
+  SELECT CHAR_LENGTH('Hello World');
+  -- books 테이블의 title의 글자수를 센 후 'length'로 명명함
+  SELECT CHAR_LENGTH(title) as 'length', title FROM books;
+  -- books 테이블의 author_lname의 글자수를 센 후 'length'로 명명함
+  SELECT author_lname, CHAR_LENGTH(author_lname) AS 'length' FROM books;
+  -- books 테이블의 author_lname의 글자수를 센 후 author_lname, ' is ', ' characters long'와 병합
+  SELECT CONCAT(author_lname, ' is ', CHAR_LENGTH(author_lname), ' characters long') FROM books;
+  ```
+
+- UPPER(UCASE), LOWER(LCASE)
+
+  ```SQL
+  -- 'Hello World'를 Upper Case로 변경
+  SELECT UPPER('Hello World');
+  -- 'Hello World'를 Lower Case로 변경
+  SELECT LOWER('Hello World');
+  -- books 테이블의 title을 Upper Case로 변경
+  SELECT UPPER(title) FROM books;
+  -- books 테이블의 title을 Upper Case로 변경 후 'MY FAVORITE BOOK IS '와 병합
+  SELECT CONCAT('MY FAVORITE BOOK IS ', UPPER(title)) FROM books;
+  -- books 테이블의 title을 Lower Case로 변경 후 'MY FAVORITE BOOK IS '와 병합
+  SELECT CONCAT('MY FAVORITE BOOK IS ', LOWER(title)) FROM books;
+  ```
+
+- 기타 함수
+
+  ```SQL
+  -- 'Hello Bobby'의 6번째 글자에 'There'을 삽입(HelloThere Bobby)
+  SELECT INSERT('Hello Bobby', 6, 0, 'There');
+  -- 'omghahalol!'의 왼쪽에서 3글자 선택(omg)
+  SELECT LEFT('omghahalol!', 3);
+  -- 'omghahalol!'의 오른쪽에서 4글자 선택(lol!)
+  SELECT RIGHT('omghahalol!', 4);
+  -- 'ha'를 4번 반복(hahahaha)
+  SELECT REPEAT('ha', 4);
+  -- '  pickle  '의 공백 제거(pickle)
+  SELECT TRIM('  pickle  ');
+  ```
