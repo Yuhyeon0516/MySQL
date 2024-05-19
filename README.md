@@ -220,3 +220,72 @@ CREATE TABLE unique_cats3 (
   PRIMARY KEY (cat_id)
 );
 ```
+
+## 데이터 CRUD Deep Dive
+
+- 데이터 셋팅
+
+  ```SQL
+  CREATE TABLE cats (
+    cat_id INT AUTO_INCREMENT,
+    name VARCHAR(100),
+    breed VARCHAR(100),
+    age INT,
+    PRIMARY KEY (cat_id)
+  );
+
+  INSERT INTO cats(name, breed, age)
+  VALUES
+        ('Ringo', 'Tabby', 4),
+        ('Cindy', 'Maine Coon', 10),
+        ('Dumbledore', 'Maine Coon', 11),
+        ('Egg', 'Persian', 4),
+        ('Misty', 'Tabby', 13),
+        ('George Michael', 'Ragdoll', 9),
+        ('Jackson', 'Sphynx', 7);
+  ```
+
+- SELECT 공식
+
+  ```SQL
+  -- cats 테이블의 모든 열을 조회
+  SELECT * FROM cats;
+  -- cats 테이블의 name 열만 조회
+  SELECT name FROM cats;
+  -- cats 테이블의 name, age 열을 조회
+  SELECT name, age FROM cats;
+  ```
+
+- WHERE
+
+  ```SQL
+  -- cats 테이블의 age가 4인 행을 조회
+  SELECT * FROM cats WHERE age=4;
+  -- cats 테이블의 name이 'Egg'인 행을 조회
+  SELECT * FROM cats WHERE name='Egg';
+  -- cats 테이블의 cat_id와 age가 같은 행 중 cat_id, age 열을 조회
+  SELECT cat_id, age FROM cats WHERE cat_id=age;
+  ```
+
+- Aliases
+
+  ```SQL
+  -- cats 테이블의 cat_id를 id로 명명하고 name 열과 같이 조회
+  SELECT cat_id AS id, name FROM cats;
+  ```
+
+- UPDATE
+
+  ```SQL
+  -- cats 테이블의 breed가 Teddy인 행의 breed를 Shorthair로 변경
+  UPDATE cats SET breed='Shorthair' WHERE breed='Teddy';
+  -- cats 테이블의 name이 Misty인 행의 age를 14로 변경
+  UPDATE cats SET age=14 WHERE name='Misty';
+  ```
+
+- DELETE
+
+  ```SQL
+  -- cats 테이블의 name이 Egg인 행을 삭제
+  DELETE FROM cats WHERE name='Egg';
+  ```
