@@ -631,3 +631,120 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
   SELECT released_year, AVG(stock_quantity), COUNT(*) FROM books
   GROUP BY released_year;
   ```
+
+## 논리 연산자
+
+- NOT EQUAL
+
+  ```SQL
+  -- books 테이블의 released_year가 2017이 아닌 행
+  SELECT * FROM books WHERE released_year != 2017;
+  ```
+
+- NOT LIKE
+
+  ```SQL
+  -- books 테이블의 title에 'e'가 포함되지 않는 행
+  SELECT * FROM books WHERE title NOT LIKE '%e%';
+  ```
+
+- GREATER THAN
+
+  ```SQL
+  -- books 테이블의 released_year가 2005보다 큰 행
+  SELECT * FROM books WHERE released_year > 2005;
+  -- books 테이블의 pages가 500보다 큰 행
+  SELECT * FROM books WHERE pages > 500;
+  ```
+
+- LESS THAN OR EQUAL TO
+
+  ```SQL
+  -- books 테이블의 pages가 200보다 작은 행
+  SELECT * FROM books WHERE pages < 200;
+  -- books 테이블의 released_year가 2000보다 작은 행
+  SELECT * FROM books WHERE released_year < 2000;
+  -- books 테이블의 released_year가 1985보다 작거나 같은 행
+  SELECT * FROM books WHERE released_year <= 1985;
+  ```
+
+- AND
+
+  ```SQL
+  -- books 테이블의 released_year가 2010보다 크고, author_lname이 'Eggers'인 행의 title, author_lname, released_year
+  SELECT title, author_lname, released_year FROM books WHERE released_year > 2010 AND author_lname = 'Eggers';
+  -- books 테이블의 released_year가 2010보다 크고, author_lname이 'Eggers'이며, title에 'novel'이 포함되는 행의 title, author_lname, released_year
+  SELECT title, author_lname, released_year FROM books WHERE released_year > 2010 AND author_lname = 'Eggers' AND title LIKE '%novel%';
+  -- books 테이블의 title의 길이가 30보다 크고 pages가 500보다 큰 행의 title, pages
+  SELECT title, pages FROM books WHERE CHAR_LENGTH(title) > 30 AND pages > 500;
+  -- books 테이블의 author_lname이 'Eggers'이고 released_year가 2010보다 큰 행의 title, author_lname
+  SELECT title, author_lname FROM books WHERE author_lname='Eggers' AND released_year > 2010;
+  ```
+
+- OR
+
+  ```SQL
+  -- books 테이블의 author_lname이 'Eggers'이거나 released_year가 2010보다 큰 행의 title, author_lname
+  SELECT title, author_lname, released_year FROM books WHERE author_lname='Eggers' OR released_year > 2010;
+  -- books 테이블의 pages가 200보다 작거나, title에 'stories'를 포함하는 행의 title, pages
+  SELECT title, pages FROM books WHERE pages < 200 OR title LIKE '%stories%';
+  ```
+
+- BETWEEN
+
+  ```SQL
+  -- books 테이블의 released_year가 2004~2015인 행의 title, released_year
+  SELECT title, released_year FROM books WHERE released_year <= 2015 AND released_year >= 2004;
+  -- books 테이블의 released_year가 2004~2014인 행의 title, released_year
+  SELECT title, released_year FROM books WHERE released_year BETWEEN 2004 AND 2014;
+  ```
+
+- 날짜 비교
+
+  ```SQL
+  -- '12:00:00'과'16:00:00'을 TEXT에서 TIME으로 CAST후 people 테이블의 birthtime이 CAST한 TIME 사이에 있는 행
+  SELECT * FROM people WHERE birthtime BETWEEN CAST('12:00:00' AS TIME) AND CAST('16:00:00' AS TIME);
+  -- people 테이블의 birthtime의 시간이 12~16에 있는 행
+  SELECT * FROM people WHERE HOUR(birthtime) BETWEEN 12 AND 16;
+  ```
+
+- IN, NOT IN
+
+  ```SQL
+  -- books 테이블의 author_lname이 'Carver', 'Lahiri', 'Smith'인 행의 title, author_lname
+  SELECT title, author_lname FROM books WHERE author_lname IN ('Carver', 'Lahiri', 'Smith');
+  -- books 테이블의 author_lname이 'Carver', 'Lahiri', 'Smith'가 아닌 행의 title, author_lname
+  SELECT title, author_lname FROM books WHERE author_lname NOT IN ('Carver', 'Lahiri', 'Smith');
+  ```
+
+- CASE
+
+  ```SQL
+  -- books 테이블의 released_year가 2000보다 크거나 같으면 'modern lit' 아니면 '20th century lit'이라는 genre를 부여하고 title, released_year을 함께 선택
+  SELECT title, released_year,
+  CASE
+    WHEN released_year >= 2000 THEN 'modern lit'
+    ELSE '20th century lit'
+  END AS genre
+  FROM books;
+  -- books 테이블의 stock_quantity가 0~40이면 '*', 41~70이면 '**', 71~100이면 '***', 101~140이면 '****' 아니면 '*****'라는 stock을 부여하고 title, stock_quantity와 같이 선택
+  SELECT title, stock_quantity,
+  CASE
+    WHEN stock_quantity BETWEEN 0 AND 40 THEN '*'
+    WHEN stock_quantity BETWEEN 41 AND 70 THEN '**'
+    WHEN stock_quantity BETWEEN 71 AND 100 THEN '***'
+    WHEN stock_quantity BETWEEN 101 AND 140 THEN '****'
+    ELSE '*****'
+  END AS stock
+  FROM books;
+  -- 위와 같음
+  SELECT title, stock_quantity,
+    CASE
+      WHEN stock_quantity <= 40 THEN '*'
+      WHEN stock_quantity <= 70 THEN '**'
+      WHEN stock_quantity <= 100 THEN '***'
+      WHEN stock_quantity <= 140 THEN '****'
+      ELSE '*****'
+    END AS stock
+  FROM books;
+  ```
