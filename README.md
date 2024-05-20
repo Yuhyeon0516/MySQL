@@ -490,3 +490,83 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
   -- books 테이블의 모든 행에 title에 '_' 앞뒤로 0개 글자 이상을 포함하고있는 행
   SELECT * FROM books WHERE title LIKE '%\_%';
   ```
+
+## Aggregate Functions(집계 함수)
+
+필요한 집계 함수가 있다면 아래 링크에서 찾아 사용하면 된다.  
+https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
+
+- COUNT
+
+  행의 개수를 세어줌
+
+  ```SQL
+  -- books 테이블의 전체 행의 개수
+  SELECT COUNT(*) FROM books;
+  -- books 테이블의 author_lname에 NULL이 아닌 값이 들어있는 행의 개수
+  SELECT COUNT(author_lname) FROM books;
+  -- books 테이블의 author_lname이 NULL이 아닌 값이며 중복되지 않는 행의 개수
+  SELECT COUNT(DISTINCT author_lname) FROM books;
+  ```
+
+- GROUP BY
+
+  ```SQL
+  -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname과 해당 author_lname 그룹의 개수를 선택
+  SELECT author_lname, COUNT(*) FROM books GROUP BY author_lname;
+  -- books 테이블의 author_lname을 기준으로 그룹화 하고 author_lname과 해당 author_lname의 개수를 선택하고 author_lname의 개수는 books_written으로 명명하고, books_written을 오름차순 기준으로 정렬
+  SELECT author_lname, COUNT(*) AS books_written FROM books GROUP BY author_lname ORDER BY books_written DESC;
+  ```
+
+- MIN & MAX
+
+  ```SQL
+  -- books 테이블의 pages가 제일 큰 것
+  SELECT MAX(pages) FROM books;
+  -- books 테이블의 author_lname이 제일 작은 것(type이 text라면 알파벳 순)
+  SELECT MIN(author_lname) FROM books;
+  -- books 테이블의 pages가 제일 큰 것을 찾고 제일 큰 pages에 해당하는 title, pages 선택
+  SELECT title, pages FROM books WHERE pages = (SELECT MAX(pages) FROM books);
+  -- books 테이블의 released_year가 제일 작은 것을 찾고 제일 작은 released_year에 해당하는 title, released_year를 선택
+  SELECT title, released_year FROM books WHERE released_year = (SELECT MIN(released_year) FROM books);
+  ```
+
+- 다중 GROUP BY
+
+  ```SQL
+  -- books 테이블을 author_lname, author_fname을 기준으로 그룹화하고 author_fname, author_lname 그리고 그룹화한 행의 개수를 선택
+  SELECT author_fname, author_lname, COUNT(*) FROM books GROUP BY author_lname, author_fname;
+  -- books 테이블을 기준으로 author_fname, ' ', author_lname을 CONCAT으로 병합하고 그것을 author로 명명한 후 author를 기준으로 그룹화 후 그룹화한 행의 개수를 선택
+  SELECT CONCAT(author_fname, ' ', author_lname) AS author,  COUNT(*) FROM books GROUP BY author;
+  -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname과 해당 그룹의 제일 작은 released_year를 선택
+  SELECT author_lname, MIN(released_year) FROM books GROUP BY author_lname;
+  -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname과 해당 그룹의 가장 큰 released_year과 제일 작은 released_year를 선택
+  SELECT author_lname, MAX(released_year), MIN(released_year) FROM books GROUP BY author_lname;
+  -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname, 그룹화한 행의 개수, released_year의 최대값, released_year의 최소값, pages의 최대값을 선택하고, 그룹화한 행의 개수는 books_written, released_year의 최대값은 latest_release, released_year의 최소값은 earliest_release, pages의 최대값은 longest_page_count로 명명함
+  SELECT author_lname, COUNT(*) as books_written, MAX(released_year) AS latest_release,MIN(released_year) AS earliest_release,MAX(pages) AS longest_page_count FROM books GROUP BY author_lname;
+  -- books 테이블의 author_lname과 author_fname을 기준으로 그룹화하고 author_lname, author_fname, 그룹화한 행의 개수, released_year의 최대값, released_year의 최소값을 선택하고, 그룹화한 행의 개수는 books_written, released_year의 최대값은 latest_release, released_year의 최소값은 earliest_release로 명명함
+  SELECT author_lname, author_fname, COUNT(*) as books_written, MAX(released_year) AS latest_release,MIN(released_year)  AS earliest_release FROM books GROUP BY author_lname, author_fname;
+  ```
+
+- SUM
+
+  숫자가 아니면 SUM의 결과는 0
+
+  ```SQL
+  -- books 테이블의 pages의 합계
+  SELECT SUM(pages) FROM books;
+  -- books 테이블의 author_lname을 기준으로 그룹화 후 author_lname, 그룹화한 행의 개수, 그룹화한 행의 pages의 합계
+  SELECT author_lname, COUNT(*), SUM(pages) FROM books GROUP BY author_lname;
+  ```
+
+- AVG
+
+  ```SQL
+  -- books 테이블의 pages의 평균
+  SELECT AVG(pages) FROM books;
+  -- books 테이블의 released_year의 평균
+  SELECT AVG(released_year) FROM books;
+  -- books 테이블의 released_year을 기준으로 그룹화 후 released_year, stock_quantity의 평균, 그룹화한 행의 개수
+  SELECT released_year, AVG(stock_quantity), COUNT(*) FROM books
+  GROUP BY released_year;
+  ```
