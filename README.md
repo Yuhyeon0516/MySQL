@@ -83,6 +83,67 @@ SELECT database();
 수많은 데이터 타입이 존재하기 때문에 이를 전부 파악하고 있는것도 좋겠지만 Docs에 더 자세히 설명이 나와있으니 아래 링크를 참조.  
 https://dev.mysql.com/doc/refman/8.3/en/data-types.html
 
+- CHAR, VARCHAR
+
+  CHAR는 문자의 길이를 고정하고 VARCHAR는 문자의 최대 길이를 정의함  
+  예시로 CHAR(3)은 무조건 3글자의 메모리를 점유하고, VARCHAR(3)은 최대 3글자의 메모리를 점유하기에 1글자이면 1글자의 메모리만 점유함  
+  결국 문자의 길이가 고정이라면 CHAR가 유리하고 가변적이라면 VARCHAR를 이용해야겠다.(예를 들어 2글자로 이루어진 국가 코드 또는 Y/N Flag같은 경우엔 CHAR가 유리할듯)
+
+- INT, TINYINT, BIGINT
+
+  https://dev.mysql.com/doc/refman/8.3/en/integer-types.html
+
+  TINYINT는 1Byte인 -128~127까지 저장가능  
+  INT는 4Byte인 -2147483648~2147483647까지 저장가능
+  BIGINT는 8Byte인 -2의 63승~2의63승-1까지 저장가능
+
+- DECIMAL
+
+  소수점을 표현하는 방식 중 하나  
+  DECIMAL(5,2)로 예시를 들자면 최대 5자리의 숫자이고 그중 소수점 뒤에 무조건 2자리까지 표시함  
+  999.99는 OK, 5.026은 가능하나 반올림으로 인한 Warning, 8347.1은 Error
+
+- FLOAT, DOUBLE
+
+  위의 DECIMAL은 소수를 정확하게 표현할 수 있으나 메모리 점유가 큼.  
+  그러나 FLOAT, DOUBLE은 메모리 점유가 비교적 적지만 정확도가 조금 떨어짐.  
+  FLOAT은 4Byte로 7자리를 넘어가면 정확도가 떨어지고, DOUBLE은 8Byte로 15자리 이후에 정확도가 떨어짐.
+
+- 날짜
+
+  - DATE, TIME, DATETIME
+
+    DATE는 YYYY-MM-DD와 같은 날짜만 저장.  
+    TIME은 HH:MM:SS와 같은 시간만 저장.  
+    DATETIME은 YYYY-MM-DD HH:MM:SS와 같이 날자와 시간 모두 저장.
+
+  - CURDATE(), CURTIME(), NOW()
+
+    CURDATE()는 현재 날짜를 표시.  
+    CURTIME()은 현재 시간을 표시.  
+    NOW()는 현재 날짜와 시간을 표시.
+
+  - DATE_FORMAT()
+
+    아래 링크의 형식 문자열을 참고하여 작성하면 원하는 형식의 DATETIME을 얻어낼 수 있다.  
+    https://dev.mysql.com/doc/refman/8.3/en/date-and-time-functions.html#function_date-format
+
+  - TIMESTAMP DEFAULT, ON UPDATE TIMESTAMP
+
+    ```SQL
+    -- captions 테이블 VARCHAR(150)의 text와 TIMESTAMP type의 created_at을 생성하고 created_at은 기본값이 CURRENT_TIMESTAMP이다.
+    CREATE TABLE captions (
+      text VARCHAR(150),
+      created_at TIMESTAMP default CURRENT_TIMESTAMP
+    );
+    -- captions2 테이블 VARCHAR(150)의 text와 TIMESTAMP type의 created_at, updated_at을 생성하고 created_at은 기본값이 CURRENT_TIMESTAMP, updated_at은 해당 행이 수정될때마다 CURRENT_TIMESTAMP를 넣어준다.
+    CREATE TABLE captions2 (
+      text VARCHAR(150),
+      created_at TIMESTAMP default CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+    ```
+
 ## 테이블 생성하기
 
 ```SQL
