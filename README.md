@@ -1122,3 +1122,151 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
 
     날짜의 형식에 0이 들어갈 수 없게 만드는 mode.  
     2024-01-00와 같은 형식이 입력되면 에러가 발생함
+
+## Window Functions
+
+- OVER()
+
+  `OVER()`는 새로운 window를 만들어 모든 행에 출력을 해준다.
+
+  ```SQL
+  -- OVER()를 사용함으로 새로운 window에서 salary를 기준으로 GROUP BY를 진행하고 전체 행 salary에 대한 MIN, MAX 값을 확인 할 수 있음
+  SELECT
+    emp_no,
+    department,
+    salary,
+    MIN(salary) OVER(),
+    MAX(salary) OVER()
+  FROM employees;
+  -- 집계함수는 GROUP BY를 해야한다고 에러가 발생함
+  SELECT
+    emp_no,
+    department,
+    salary,
+    MIN(salary),
+    MAX(salary)
+  FROM employees;
+  ```
+
+- PARTITION BY
+
+  ```SQL
+  -- OVER(PARTITION BY department)를 사용하여 department로 그룹화하고 해당 그룹의 salary 평균을 구할 수 있음
+  SELECT
+    emp_no,
+    department,
+    salary,
+    AVG(salary) OVER(PARTITION BY department) AS dept_avg,
+    AVG(salary) OVER() AS company_avg
+  FROM employees;
+  -- OVER(PARTITION BY department)를 이용하여 department로 그룹화하고 해당 그룹에 행이 몇개인지 count함
+  SELECT
+    emp_no,
+    department,
+    salary,
+    COUNT(*) OVER(PARTITION BY department) as dept_count
+  FROM employees;
+  -- OVER(PARTITION BY department)를 이용하여 department로 그룹화하고 해당 그룹의 salary 총합을 구할 수 있음
+  SELECT
+    emp_no,
+    department,
+    salary,
+    SUM(salary) OVER(PARTITION BY department) AS dept_payroll,
+    SUM(salary) OVER() AS total_payroll
+  FROM employees;
+  ```
+
+- RANK()
+
+  현재 행의 순위를 표시해줌.  
+  항상 `OVER(ORDER BY)`를 이용하여 무엇에 대한 순위를 정할 것인지 정의해주어야함
+
+  ```SQL
+  SELECT
+    emp_no,
+    department,
+    salary,
+    -- department로 그룹화를 하고 해당 그룹 내의 salary 순위를 표시
+    RANK() OVER(PARTITION BY department ORDER BY salary DESC) AS dept_salary_rank,
+    -- 전체 행의 salary 순위를 표시
+    RANK() OVER(ORDER BY salary DESC) AS overall_salary_rank
+  FROM employees
+  ORDER BY department
+  ```
+
+- DENSE_RANK(), ROW_NUMBER()
+
+  `DENSE_RANK()`는 `RANK()`와 다르게 같은 순위가 발생하게 되면 뒤에 순위를 넘기지 않고 진행함.(예를 들어 2위가 2명이면 `DENSE_RANK()`는 2위, 2위, 3위로 진행되고 `RANK()`는 2위, 2위, 4위로 진행됨)  
+  `ROW_NUMBER()`는 말 그대로 행의 번호이다.
+
+  ```SQL
+  SELECT
+    emp_no,
+    department,
+    salary,
+    -- department로 그룹화 후 salary를 기준으로 내림차순 정렬을 했을때 행번호
+    ROW_NUMBER() OVER(PARTITION BY department ORDER BY salary DESC) as dept_row_number,
+    -- department로 그룹화를 하고 해당 그룹 내의 salary 순위를 내림차순으로 표시
+    RANK() OVER(PARTITION BY department ORDER BY salary DESC) as dept_salary_rank,
+    -- 전체 행에 대해 salary 순위를 내림차순으로 표시
+    RANK() OVER(ORDER BY salary DESC) as overall_rank,
+    -- 전체 행에 대해 salary 순위를 표시하나 중복 시 뒤 순위를 넘기지 않음
+    DENSE_RANK() OVER(ORDER BY salary DESC) as overall_dense_rank,
+    -- 전체 행에 대해 salary의 내림차순으로 정렬하고 해당 행의 번호를 표시
+    ROW_NUMBER() OVER(ORDER BY salary DESC) as overall_num
+  FROM employees ORDER BY overall_rank;
+  ```
+
+- NTILE()
+
+  4분위 또는 100분위와 같은 N분위를 구할 수 있는 함수
+
+  ```SQL
+  SELECT
+    emp_no,
+    department,
+    salary,
+    -- department를 기준으로 그룹화 후 salary 순으로 정렬하고 해당 행이 4분위중 어디에 속하는지 표시
+    NTILE(4) OVER(PARTITION BY department ORDER BY salary DESC) AS dept_salary_quartile,
+    -- 전체 행을 salary 순으로 정렬하고 해당 행이 4분위중 어디에 속하는지 표시
+    NTILE(4) OVER(ORDER BY salary DESC) AS salary_quartile
+  FROM employees;
+  ```
+
+- FIRST_VALUE()
+
+  가장 처음에 있는 값을 표시
+
+  ```SQL
+  SELECT
+    emp_no,
+    department,
+    salary,
+    -- department로 그룹화를 하고 salary의 내림차순 중 제일 처음 오는 행의 emp_no를 표시
+    FIRST_VALUE(emp_no) OVER(PARTITION BY department ORDER BY salary DESC) as highest_paid_dept,
+    -- 전체 행을 salary의 내림차순 중 제일 처음 오는 행의 emp_no를 표시
+    FIRST_VALUE(emp_no) OVER(ORDER BY salary DESC) as highest_paid_overall
+  FROM employees;
+  ```
+
+- LEAD(), LAG()
+
+  `LAG()`는 이전 행의 값, `LEAD()`는 다음 행의 값을 표시
+
+  ```SQL
+  SELECT
+    emp_no,
+    department,
+    salary,
+    -- 전체 행을 salary의 내림차순으로 정렬하고 이전 행의 salary 값을 현재 salary에서 뺌
+    salary - LAG(salary) OVER(ORDER BY salary DESC) as salary_diff
+  FROM employees;
+
+  SELECT
+    emp_no,
+    department,
+    salary,
+    -- department로 그룹화하고 해당 그룹을 salary의 내림차순으로 정렬하고 이전 행의 salary 값을 현재 salary에서 뺌
+    salary - LAG(salary) OVER(PARTITION BY department ORDER BY salary DESC) as dept_salary_diff
+  FROM employees;
+  ```
