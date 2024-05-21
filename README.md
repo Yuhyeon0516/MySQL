@@ -321,11 +321,14 @@ CREATE TABLE unique_cats3 (
 
   ```SQL
   -- cats 테이블의 age가 4인 행을 조회
-  SELECT * FROM cats WHERE age=4;
+  SELECT * FROM cats
+  WHERE age=4;
   -- cats 테이블의 name이 'Egg'인 행을 조회
-  SELECT * FROM cats WHERE name='Egg';
+  SELECT * FROM cats
+  WHERE name='Egg';
   -- cats 테이블의 cat_id와 age가 같은 행 중 cat_id, age 열을 조회
-  SELECT cat_id, age FROM cats WHERE cat_id=age;
+  SELECT cat_id, age FROM cats
+  WHERE cat_id=age;
   ```
 
 - Aliases
@@ -339,16 +342,19 @@ CREATE TABLE unique_cats3 (
 
   ```SQL
   -- cats 테이블의 breed가 Teddy인 행의 breed를 Shorthair로 변경
-  UPDATE cats SET breed='Shorthair' WHERE breed='Teddy';
+  UPDATE cats SET breed='Shorthair'
+  WHERE breed='Teddy';
   -- cats 테이블의 name이 Misty인 행의 age를 14로 변경
-  UPDATE cats SET age=14 WHERE name='Misty';
+  UPDATE cats SET age=14
+  WHERE name='Misty';
   ```
 
 - DELETE
 
   ```SQL
   -- cats 테이블의 name이 Egg인 행을 삭제
-  DELETE FROM cats WHERE name='Egg';
+  DELETE FROM cats
+  WHERE name='Egg';
   ```
 
 ## String Functions
@@ -498,15 +504,20 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
 
   ```SQL
   -- books 테이블의 행을 author_lname의 내림차순으로 정렬 후 선택
-  SELECT * FROM books ORDER BY author_lname;
+  SELECT * FROM books
+  ORDER BY author_lname;
   -- books 테이블의 행을 author_lname의 오름차순으로 정렬 후 선택
-  SELECT * FROM books ORDER BY author_lname DESC;
+  SELECT * FROM books
+  ORDER BY author_lname DESC;
   -- books 테이블의 행을 released_year의 내림차순으로 정렬 후 선택
-  SELECT * FROM books ORDER BY released_year;
+  SELECT * FROM books
+  ORDER BY released_year;
   -- books 테이블의 book_id, author_fname, author_lname, pages를 선택 후 2번째 선택한 author_fname을 기준으로 오름차순 정렬
-  SELECT book_id, author_fname, author_lname, pages FROM books ORDER BY 2 desc;
+  SELECT book_id, author_fname, author_lname, pages FROM books
+  ORDER BY 2 DESC;
   -- books 테이블의 book_id, author_fname, author_lname, pages를 선택 후 author_lname을 기준으로 정렬 후 author_fname을 기준으로 다시 정렬
-  SELECT book_id, author_fname, author_lname, pages FROM books ORDER BY author_lname, author_fname;
+  SELECT book_id, author_fname, author_lname, pages FROM books
+  ORDER BY author_lname, author_fname;
   ```
 
 - LIMIT
@@ -515,15 +526,22 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
 
   ```SQL
   -- books 테이블의 title 행을 3개 반환
-  SELECT title FROM books LIMIT 3;
+  SELECT title FROM books
+  LIMIT 3;
   -- books 테이블의 전체 행을 1개 반환
-  SELECT * FROM books LIMIT 1;
+  SELECT * FROM books
+  LIMIT 1;
   -- books 테이블의 title, released_year 행을 released_year을 기준으로 오름차순 정렬 후 5개를 반환
-  SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 5;
+  SELECT title, released_year FROM books
+  ORDER BY released_year DESC
+  LIMIT 5;
   -- books 테이블의 title, released_year 행을 released_year을 기준으로 오름차순 정렬 후 0번째부터 5개를 반환
-  SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 0,5;
+  SELECT title, released_year FROM books
+  ORDER BY released_year DESC
+  LIMIT 0,5;
   -- books 테이블의 title 행을 5번째부터 50개를 반환
-  SELECT title FROM books LIMIT 5, 50;
+  SELECT title FROM books
+  LIMIT 5, 50;
   ```
 
 - LIKE
@@ -532,13 +550,17 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
 
   ```SQL
   -- books 테이블의 title, author_fname, author_lname, pages를 선택하고 author_fname에 'da' 앞뒤에 0개 이상의 글자가 포함되는 행만 반환
-  SELECT title, author_fname, author_lname, pages FROM books WHERE author_fname LIKE '%da%';
+  SELECT title, author_fname, author_lname, pages FROM books
+  WHERE author_fname LIKE '%da%';
   -- books 테이블의 title, author_fname, author_lname, pages를 선택하고 title에 ':' 앞뒤에 0개 이상의 글자가 포함되는 행만 반환
-  SELECT title, author_fname, author_lname, pages FROM books WHERE title LIKE '%:%';
+  SELECT title, author_fname, author_lname, pages FROM books
+  WHERE title LIKE '%:%';
   -- books 테이블의 모든 행에 author_fname이 4글자인 행만 반환
-  SELECT * FROM books WHERE author_fname LIKE '____';
+  SELECT * FROM books
+  WHERE author_fname LIKE '____';
   -- books 테이블의 모든 행에 author_fname이 a를 포함하고 앞뒤에 1개 글자를 추가로 가지고있는 행 즉 a가 가운데에 있고 3글자인 행만 반환
-  SELECT * FROM books WHERE author_fname LIKE '_a_';
+  SELECT * FROM books
+  WHERE author_fname LIKE '_a_';
   ```
 
 - ESCAPE
@@ -547,9 +569,11 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
 
   ```SQL
   -- books 테이블의 모든 행에 title에 '%' 앞뒤로 0개 글자 이상을 포함하고있는 행
-  SELECT * FROM books WHERE title LIKE '%\%%';
+  SELECT * FROM books
+  WHERE title LIKE '%\%%';
   -- books 테이블의 모든 행에 title에 '_' 앞뒤로 0개 글자 이상을 포함하고있는 행
-  SELECT * FROM books WHERE title LIKE '%\_%';
+  SELECT * FROM books
+  WHERE title LIKE '%\_%';
   ```
 
 ## Aggregate Functions(집계 함수)
@@ -574,9 +598,12 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
 
   ```SQL
   -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname과 해당 author_lname 그룹의 개수를 선택
-  SELECT author_lname, COUNT(*) FROM books GROUP BY author_lname;
+  SELECT author_lname, COUNT(*) FROM books
+  GROUP BY author_lname;
   -- books 테이블의 author_lname을 기준으로 그룹화 하고 author_lname과 해당 author_lname의 개수를 선택하고 author_lname의 개수는 books_written으로 명명하고, books_written을 오름차순 기준으로 정렬
-  SELECT author_lname, COUNT(*) AS books_written FROM books GROUP BY author_lname ORDER BY books_written DESC;
+  SELECT author_lname, COUNT(*) AS books_written FROM books
+  GROUP BY author_lname
+  ORDER BY books_written DESC;
   ```
 
 - MIN & MAX
@@ -587,26 +614,34 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
   -- books 테이블의 author_lname이 제일 작은 것(type이 text라면 알파벳 순)
   SELECT MIN(author_lname) FROM books;
   -- books 테이블의 pages가 제일 큰 것을 찾고 제일 큰 pages에 해당하는 title, pages 선택
-  SELECT title, pages FROM books WHERE pages = (SELECT MAX(pages) FROM books);
+  SELECT title, pages FROM books
+  WHERE pages = (SELECT MAX(pages) FROM books);
   -- books 테이블의 released_year가 제일 작은 것을 찾고 제일 작은 released_year에 해당하는 title, released_year를 선택
-  SELECT title, released_year FROM books WHERE released_year = (SELECT MIN(released_year) FROM books);
+  SELECT title, released_year FROM books
+  WHERE released_year = (SELECT MIN(released_year) FROM books);
   ```
 
 - 다중 GROUP BY
 
   ```SQL
   -- books 테이블을 author_lname, author_fname을 기준으로 그룹화하고 author_fname, author_lname 그리고 그룹화한 행의 개수를 선택
-  SELECT author_fname, author_lname, COUNT(*) FROM books GROUP BY author_lname, author_fname;
+  SELECT author_fname, author_lname, COUNT(*) FROM books
+  GROUP BY author_lname, author_fname;
   -- books 테이블을 기준으로 author_fname, ' ', author_lname을 CONCAT으로 병합하고 그것을 author로 명명한 후 author를 기준으로 그룹화 후 그룹화한 행의 개수를 선택
-  SELECT CONCAT(author_fname, ' ', author_lname) AS author,  COUNT(*) FROM books GROUP BY author;
+  SELECT CONCAT(author_fname, ' ', author_lname) AS author,  COUNT(*) FROM books
+  GROUP BY author;
   -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname과 해당 그룹의 제일 작은 released_year를 선택
-  SELECT author_lname, MIN(released_year) FROM books GROUP BY author_lname;
+  SELECT author_lname, MIN(released_year) FROM books
+  GROUP BY author_lname;
   -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname과 해당 그룹의 가장 큰 released_year과 제일 작은 released_year를 선택
-  SELECT author_lname, MAX(released_year), MIN(released_year) FROM books GROUP BY author_lname;
+  SELECT author_lname, MAX(released_year), MIN(released_year) FROM books
+  GROUP BY author_lname;
   -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname, 그룹화한 행의 개수, released_year의 최대값, released_year의 최소값, pages의 최대값을 선택하고, 그룹화한 행의 개수는 books_written, released_year의 최대값은 latest_release, released_year의 최소값은 earliest_release, pages의 최대값은 longest_page_count로 명명함
-  SELECT author_lname, COUNT(*) as books_written, MAX(released_year) AS latest_release,MIN(released_year) AS earliest_release,MAX(pages) AS longest_page_count FROM books GROUP BY author_lname;
+  SELECT author_lname, COUNT(*) as books_written, MAX(released_year) AS latest_release,MIN(released_year) AS earliest_release,MAX(pages) AS longest_page_count FROM books
+  GROUP BY author_lname;
   -- books 테이블의 author_lname과 author_fname을 기준으로 그룹화하고 author_lname, author_fname, 그룹화한 행의 개수, released_year의 최대값, released_year의 최소값을 선택하고, 그룹화한 행의 개수는 books_written, released_year의 최대값은 latest_release, released_year의 최소값은 earliest_release로 명명함
-  SELECT author_lname, author_fname, COUNT(*) as books_written, MAX(released_year) AS latest_release,MIN(released_year)  AS earliest_release FROM books GROUP BY author_lname, author_fname;
+  SELECT author_lname, author_fname, COUNT(*) as books_written, MAX(released_year) AS latest_release,MIN(released_year)  AS earliest_release FROM books
+  GROUP BY author_lname, author_fname;
   ```
 
 - SUM
@@ -617,7 +652,8 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
   -- books 테이블의 pages의 합계
   SELECT SUM(pages) FROM books;
   -- books 테이블의 author_lname을 기준으로 그룹화 후 author_lname, 그룹화한 행의 개수, 그룹화한 행의 pages의 합계
-  SELECT author_lname, COUNT(*), SUM(pages) FROM books GROUP BY author_lname;
+  SELECT author_lname, COUNT(*), SUM(pages) FROM books
+  GROUP BY author_lname;
   ```
 
 - AVG
@@ -638,83 +674,102 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
 
   ```SQL
   -- books 테이블의 released_year가 2017이 아닌 행
-  SELECT * FROM books WHERE released_year != 2017;
+  SELECT * FROM books
+  WHERE released_year != 2017;
   ```
 
 - NOT LIKE
 
   ```SQL
   -- books 테이블의 title에 'e'가 포함되지 않는 행
-  SELECT * FROM books WHERE title NOT LIKE '%e%';
+  SELECT * FROM books
+  WHERE title NOT LIKE '%e%';
   ```
 
 - GREATER THAN
 
   ```SQL
   -- books 테이블의 released_year가 2005보다 큰 행
-  SELECT * FROM books WHERE released_year > 2005;
+  SELECT * FROM books
+  WHERE released_year > 2005;
   -- books 테이블의 pages가 500보다 큰 행
-  SELECT * FROM books WHERE pages > 500;
+  SELECT * FROM books
+  WHERE pages > 500;
   ```
 
 - LESS THAN OR EQUAL TO
 
   ```SQL
   -- books 테이블의 pages가 200보다 작은 행
-  SELECT * FROM books WHERE pages < 200;
+  SELECT * FROM books
+  WHERE pages < 200;
   -- books 테이블의 released_year가 2000보다 작은 행
-  SELECT * FROM books WHERE released_year < 2000;
+  SELECT * FROM books
+  WHERE released_year < 2000;
   -- books 테이블의 released_year가 1985보다 작거나 같은 행
-  SELECT * FROM books WHERE released_year <= 1985;
+  SELECT * FROM books
+  WHERE released_year <= 1985;
   ```
 
 - AND
 
   ```SQL
   -- books 테이블의 released_year가 2010보다 크고, author_lname이 'Eggers'인 행의 title, author_lname, released_year
-  SELECT title, author_lname, released_year FROM books WHERE released_year > 2010 AND author_lname = 'Eggers';
+  SELECT title, author_lname, released_year FROM books
+  WHERE released_year > 2010 AND author_lname = 'Eggers';
   -- books 테이블의 released_year가 2010보다 크고, author_lname이 'Eggers'이며, title에 'novel'이 포함되는 행의 title, author_lname, released_year
-  SELECT title, author_lname, released_year FROM books WHERE released_year > 2010 AND author_lname = 'Eggers' AND title LIKE '%novel%';
+  SELECT title, author_lname, released_year FROM books
+  WHERE released_year > 2010 AND author_lname = 'Eggers' AND title LIKE '%novel%';
   -- books 테이블의 title의 길이가 30보다 크고 pages가 500보다 큰 행의 title, pages
-  SELECT title, pages FROM books WHERE CHAR_LENGTH(title) > 30 AND pages > 500;
+  SELECT title, pages FROM books
+  WHERE CHAR_LENGTH(title) > 30 AND pages > 500;
   -- books 테이블의 author_lname이 'Eggers'이고 released_year가 2010보다 큰 행의 title, author_lname
-  SELECT title, author_lname FROM books WHERE author_lname='Eggers' AND released_year > 2010;
+  SELECT title, author_lname FROM books
+  WHERE author_lname='Eggers' AND released_year > 2010;
   ```
 
 - OR
 
   ```SQL
   -- books 테이블의 author_lname이 'Eggers'이거나 released_year가 2010보다 큰 행의 title, author_lname
-  SELECT title, author_lname, released_year FROM books WHERE author_lname='Eggers' OR released_year > 2010;
+  SELECT title, author_lname, released_year FROM books
+  WHERE author_lname='Eggers' OR released_year > 2010;
   -- books 테이블의 pages가 200보다 작거나, title에 'stories'를 포함하는 행의 title, pages
-  SELECT title, pages FROM books WHERE pages < 200 OR title LIKE '%stories%';
+  SELECT title, pages FROM books
+  WHERE pages < 200 OR title LIKE '%stories%';
   ```
 
 - BETWEEN
 
   ```SQL
   -- books 테이블의 released_year가 2004~2015인 행의 title, released_year
-  SELECT title, released_year FROM books WHERE released_year <= 2015 AND released_year >= 2004;
+  SELECT title, released_year FROM books
+  WHERE released_year <= 2015 AND released_year >= 2004;
   -- books 테이블의 released_year가 2004~2014인 행의 title, released_year
-  SELECT title, released_year FROM books WHERE released_year BETWEEN 2004 AND 2014;
+  SELECT title, released_year FROM books
+  WHERE released_year BETWEEN 2004 AND 2014;
   ```
 
 - 날짜 비교
 
   ```SQL
   -- '12:00:00'과'16:00:00'을 TEXT에서 TIME으로 CAST후 people 테이블의 birthtime이 CAST한 TIME 사이에 있는 행
-  SELECT * FROM people WHERE birthtime BETWEEN CAST('12:00:00' AS TIME) AND CAST('16:00:00' AS TIME);
+  SELECT * FROM people
+  WHERE birthtime BETWEEN CAST('12:00:00' AS TIME) AND CAST('16:00:00' AS TIME);
   -- people 테이블의 birthtime의 시간이 12~16에 있는 행
-  SELECT * FROM people WHERE HOUR(birthtime) BETWEEN 12 AND 16;
+  SELECT * FROM people
+  WHERE HOUR(birthtime) BETWEEN 12 AND 16;
   ```
 
 - IN, NOT IN
 
   ```SQL
   -- books 테이블의 author_lname이 'Carver', 'Lahiri', 'Smith'인 행의 title, author_lname
-  SELECT title, author_lname FROM books WHERE author_lname IN ('Carver', 'Lahiri', 'Smith');
+  SELECT title, author_lname FROM books
+  WHERE author_lname IN ('Carver', 'Lahiri', 'Smith');
   -- books 테이블의 author_lname이 'Carver', 'Lahiri', 'Smith'가 아닌 행의 title, author_lname
-  SELECT title, author_lname FROM books WHERE author_lname NOT IN ('Carver', 'Lahiri', 'Smith');
+  SELECT title, author_lname FROM books
+  WHERE author_lname NOT IN ('Carver', 'Lahiri', 'Smith');
   ```
 
 - CASE
@@ -748,3 +803,119 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
     END AS stock
   FROM books;
   ```
+
+## 제약 조건 및 테이블 수정
+
+- UNIQUE
+
+  테이블에 고유한 값을 지정해주고 싶을 때 사용
+
+  ```SQL
+  CREATE TABLE contacts (
+    name VARCHAR(100) NOT NULL,
+    phone VARCHAR(15) NOT NULL UNIQUE
+  );
+  -- contacts 테이블에 데이터 추가
+  INSERT INTO contacts (name, phone)
+  VALUES ('billybob', '8781213455');
+  -- phone에 이미 중복된 값이 있어 Duplicate Error가 발생
+  INSERT INTO contacts (name, phone)
+  VALUES ('billybob2', '8781213455');
+  ```
+
+- CHECK
+
+  값에 특정 조건을 확인하고 싶을 때 사용
+
+  ```SQL
+  -- age 열은 0보다 커여하는 조건을 걸어 users 테이블을 생성
+  CREATE TABLE users (
+    username VARCHAR(20) NOT NULL,
+    age INT CHECK (age > 0)
+  );
+  ```
+
+- 제약 조건 명명
+
+  CONSTRAINT 키워드를 통해 제약 조건에 명명을 해줄수 있음
+
+  ```SQL
+  -- CHECK 제약조건으로 age가 음수이면 안되는 조건을 걸고 해당하는 조건의 이름은 age_not_negative로 명명
+  CREATE TABLE users2 (
+    username VARCHAR(20) NOT NULL,
+    age INT,
+    CONSTRAINT age_not_negative CHECK (age >= 0)
+  );
+  ```
+
+- 다중 열 제약 조건
+
+  ```SQL
+  -- name, address에 다중으로 UNIQUE 제약 조건을 걸고 해당 제약 조건의 이름은 name_address로 명명
+  CREATE TABLE companies (
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    CONSTRAINT name_address UNIQUE (name , address)
+  );
+  ```
+
+- ALTER TABLE(테이블 수정)
+
+  ALTER TABLE의 상세 기능들은 아래 링크에서 확인이 가능하다.  
+  테이블의 CRUD는 ALTER TABLE로 모두 가능하다.  
+  https://dev.mysql.com/doc/refman/8.3/en/alter-table.html
+
+  - 테이블 열 추가
+
+    ```SQL
+    -- companies 테이블에 VARCHAR(15) 타입의 phone 컬럼을 추가한다.
+    ALTER TABLE companies
+    ADD COLUMN phone VARCHAR(15);
+    -- companies 테이블에 INT 타입이고 NULL이 아니며 기본값이 1인 employee_count 컬럼을 추가한다.
+    ALTER TABLE companies
+    ADD COLUMN employee_count INT NOT NULL DEFAULT 1;
+    ```
+
+  - 테이블 열 삭제
+
+    값이 있어도 강제로 삭제하니 주의요망
+
+    ```SQL
+    -- companies 테이블에 phone 컬럼을 삭제
+    ALTER TABLE companies
+    DROP COLUMN phone;
+    ```
+
+  - 테이블, 열 이름 변경
+
+    ```SQL
+    -- suppliers 테이블을 companies로 이름 변경
+    ALTER TABLE suppliers RENAME TO companies;
+    -- 위와 같은 기능을 함
+    RENAME TABLE companies to suppliers;
+    -- companies 테이블의 name 컬럼을 company_name으로 변경
+    ALTER TABLE companies
+    RENAME COLUMN name TO company_name;
+    ```
+
+  - 테이블 열 수정
+
+    ```SQL
+    -- companies 테이블의 company_name 컬럼의 타입을 VARCHAR(100)으로, 기본값은 'unknown'으로 변경
+    ALTER TABLE companies
+    MODIFY company_name VARCHAR(100) DEFAULT 'unknown';
+    -- suppliers 테이블의 business 컬럼을 biz_name으로, 타입은 VARCHAR(50)으로 변경
+    ALTER TABLE suppliers
+    CHANGE business biz_name VARCHAR(50);
+    ```
+
+  - 테이블 제약 조건 수정
+
+    ```SQL
+    -- houses 테이블의 purchase_price가 양수여야 하는 제약 조건을 추가하고 positive_pprice라고 명명함
+    ALTER TABLE houses
+    ADD CONSTRAINT positive_pprice CHECK (purchase_price >= 0);
+    -- houses 테이블의 positive_pprice 제약 조건을 삭제
+    ALTER TABLE houses
+    DROP CONSTRAINT positive_pprice;
+    ```
