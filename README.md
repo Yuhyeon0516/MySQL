@@ -85,47 +85,47 @@ https://dev.mysql.com/doc/refman/8.3/en/data-types.html
 
 - CHAR, VARCHAR
 
-  CHAR는 문자의 길이를 고정하고 VARCHAR는 문자의 최대 길이를 정의함  
-  예시로 CHAR(3)은 무조건 3글자의 메모리를 점유하고, VARCHAR(3)은 최대 3글자의 메모리를 점유하기에 1글자이면 1글자의 메모리만 점유함  
-  결국 문자의 길이가 고정이라면 CHAR가 유리하고 가변적이라면 VARCHAR를 이용해야겠다.(예를 들어 2글자로 이루어진 국가 코드 또는 Y/N Flag같은 경우엔 CHAR가 유리할듯)
+  `CHAR`는 문자의 길이를 고정하고 `VARCHAR`는 문자의 최대 길이를 정의함  
+  예시로 `CHAR(3)`은 무조건 3글자의 메모리를 점유하고, `VARCHAR(3)`은 최대 3글자의 메모리를 점유하기에 1글자이면 1글자의 메모리만 점유함  
+  결국 문자의 길이가 고정이라면 `CHAR`가 유리하고 가변적이라면 `VARCHAR`를 이용해야겠다.(예를 들어 2글자로 이루어진 국가 코드 또는 Y/N Flag같은 경우엔 `CHAR`가 유리할듯)
 
 - INT, TINYINT, BIGINT
 
   https://dev.mysql.com/doc/refman/8.3/en/integer-types.html
 
-  TINYINT는 1Byte인 -128~127까지 저장가능  
-  INT는 4Byte인 -2147483648~2147483647까지 저장가능
-  BIGINT는 8Byte인 -2의 63승~2의63승-1까지 저장가능
+  `TINYINT`는 1Byte인 -128~127까지 저장가능  
+  `INT`는 4Byte인 -2147483648~2147483647까지 저장가능
+  `BIGINT`는 8Byte인 -2의 63승~2의63승-1까지 저장가능
 
 - DECIMAL
 
   소수점을 표현하는 방식 중 하나  
-  DECIMAL(5,2)로 예시를 들자면 최대 5자리의 숫자이고 그중 소수점 뒤에 무조건 2자리까지 표시함  
+  `DECIMAL(5,2)`로 예시를 들자면 최대 5자리의 숫자이고 그중 소수점 뒤에 무조건 2자리까지 표시함  
   999.99는 OK, 5.026은 가능하나 반올림으로 인한 Warning, 8347.1은 Error
 
 - FLOAT, DOUBLE
 
-  위의 DECIMAL은 소수를 정확하게 표현할 수 있으나 메모리 점유가 큼.  
-  그러나 FLOAT, DOUBLE은 메모리 점유가 비교적 적지만 정확도가 조금 떨어짐.  
-  FLOAT은 4Byte로 7자리를 넘어가면 정확도가 떨어지고, DOUBLE은 8Byte로 15자리 이후에 정확도가 떨어짐.
+  위의 `DECIMAL`은 소수를 정확하게 표현할 수 있으나 메모리 점유가 큼.  
+  그러나 `FLOAT`, `DOUBLE`은 메모리 점유가 비교적 적지만 정확도가 조금 떨어짐.  
+  `FLOAT`은 4Byte로 7자리를 넘어가면 정확도가 떨어지고, `DOUBLE`은 8Byte로 15자리 이후에 정확도가 떨어짐.
 
 - 날짜
 
   - DATE, TIME, DATETIME
 
-    DATE는 YYYY-MM-DD와 같은 날짜만 저장.  
-    TIME은 HH:MM:SS와 같은 시간만 저장.  
-    DATETIME은 YYYY-MM-DD HH:MM:SS와 같이 날자와 시간 모두 저장.
+    `DATE`는 YYYY-MM-DD와 같은 날짜만 저장.  
+    `TIME`은 HH:MM:SS와 같은 시간만 저장.  
+    `DATETIME`은 YYYY-MM-DD HH:MM:SS와 같이 날자와 시간 모두 저장.
 
   - CURDATE(), CURTIME(), NOW()
 
-    CURDATE()는 현재 날짜를 표시.  
-    CURTIME()은 현재 시간을 표시.  
-    NOW()는 현재 날짜와 시간을 표시.
+    `CURDATE()`는 현재 날짜를 표시.  
+    `CURTIME()`은 현재 시간을 표시.  
+    `NOW()`는 현재 날짜와 시간을 표시.
 
   - DATE_FORMAT()
 
-    아래 링크의 형식 문자열을 참고하여 작성하면 원하는 형식의 DATETIME을 얻어낼 수 있다.  
+    아래 링크의 형식 문자열을 참고하여 작성하면 원하는 형식의 `DATETIME`을 얻어낼 수 있다.  
     https://dev.mysql.com/doc/refman/8.3/en/date-and-time-functions.html#function_date-format
 
   - TIMESTAMP DEFAULT, ON UPDATE TIMESTAMP
@@ -213,7 +213,7 @@ VALUES
 
 ## NULL, NOT_NULL
 
-기본값은 NULL로 설정되나 Table 생성 시 NOT NULL을 선언해줄수 있다.
+기본값은 `NULL`로 설정되나 Table 생성 시 `NOT NULL`을 선언해줄수 있다.
 
 ```SQL
 CREATE TABLE <table_name>
@@ -500,7 +500,7 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
 
 - ORDER BY
 
-  ORDER BY는 기본적으로 ASCENDING 즉 내림차순으로 되어있음.
+  `ORDER BY`는 기본적으로 ASCENDING 즉 내림차순으로 되어있음.
 
   ```SQL
   -- books 테이블의 행을 author_lname의 내림차순으로 정렬 후 선택
@@ -565,7 +565,7 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
 
 - ESCAPE
 
-  `%`, `_` 등과 같이 SQL의 규칙이 적용되어 있는 문자는 ESCAPE 즉 역슬래쉬 처리를 해주어 문자라고 인지를 시켜주어야 검색이 가능하다.
+  `%`, `_` 등과 같이 SQL의 규칙이 적용되어 있는 문자는 `ESCAPE` 즉 역슬래쉬 처리를 해주어 문자라고 인지를 시켜주어야 검색이 가능하다.
 
   ```SQL
   -- books 테이블의 모든 행에 title에 '%' 앞뒤로 0개 글자 이상을 포함하고있는 행
@@ -646,7 +646,7 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
 
 - SUM
 
-  숫자가 아니면 SUM의 결과는 0
+  숫자가 아니면 `SUM`의 결과는 0
 
   ```SQL
   -- books 테이블의 pages의 합계
@@ -837,7 +837,7 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
 
 - 제약 조건 명명
 
-  CONSTRAINT 키워드를 통해 제약 조건에 명명을 해줄수 있음
+  `CONSTRAINT` 키워드를 통해 제약 조건에 명명을 해줄수 있음
 
   ```SQL
   -- CHECK 제약조건으로 age가 음수이면 안되는 조건을 걸고 해당하는 조건의 이름은 age_not_negative로 명명
@@ -861,8 +861,8 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
 
 - ALTER TABLE(테이블 수정)
 
-  ALTER TABLE의 상세 기능들은 아래 링크에서 확인이 가능하다.  
-  테이블의 CRUD는 ALTER TABLE로 모두 가능하다.  
+  `ALTER TABLE`의 상세 기능들은 아래 링크에서 확인이 가능하다.  
+  테이블의 CRUD는 `ALTER TABLE`로 모두 가능하다.  
   https://dev.mysql.com/doc/refman/8.3/en/alter-table.html
 
   - 테이블 열 추가
@@ -919,3 +919,101 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
     ALTER TABLE houses
     DROP CONSTRAINT positive_pprice;
     ```
+
+## 일대다(One To Many & Joins)
+
+- 외래키(Foreign Key)
+
+  외래키는 다른 테이블의 Primary Key(PK)를 참조하는 테이블의 컬럼.
+
+  ```SQL
+  -- customers 테이블 생성
+  CREATE TABLE customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(50)
+  );
+  -- orders 테이블을 생성하고 customer_id는 customers 테이블의 id를 참조함
+  CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_date DATE,
+    amount DECIMAL(8,2),
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+  );
+  ```
+
+- Cross Join
+
+  여러 테이블의 모든 정보를 조합하여 보여줌
+
+  ```SQL
+  SELECT * FROM customers, orders;
+  ```
+
+- Inner Join
+
+  테이블을 합치고 중복되는 부분만 확인
+
+  ```SQL
+  -- customers 테이블에 orders 테이블을 join하고 orders의 customer_id와 customers의 id가 같다고 명시해주어 테이블을 join함
+  SELECT * FROM customers
+  JOIN orders ON orders.customer_id = customers.id;
+  -- 위와 같은 결과에 원하는 결과만 선택하여 확인
+  SELECT first_name, last_name, order_date, amount FROM customers
+  JOIN orders ON orders.customer_id = customers.id;
+  -- customers 테이블에 orders를 join 하고 first_name, last_name을 기준으로 그룹화하고 amount의 합계인 total을 기준으로 내림차순 정렬
+  SELECT first_name, last_name, SUM(amount) AS total FROM customers
+  JOIN orders ON orders.customer_id = customers.id
+  GROUP BY first_name , last_name
+  ORDER BY total;
+  ```
+
+- Left Join
+
+  `INNER JOIN`과 유사하나 왼쪽에 제시한 테이블의 모든 행을 보여줌
+
+  ```SQL
+  -- customers 테이블에 orders를 join하는데 customers는 left로 모든 행을 출력함
+  SELECT first_name, last_name, order_date, amount FROM customers
+  LEFT JOIN orders ON orders.customer_id = customers.id;
+  -- orders 테이블에 customers를 join하는데 orders를 left로 모든 행을 출력함
+  SELECT order_date, amount, first_name, last_name FROM orders
+  LEFT JOIN customers ON orders.customer_id = customers.id;
+  -- customers 테이블에 orders를 join하고 first_name, last_name을 기준으로 그룹화 후 amount의 합계를 구한 후 만약 NULL이라면 0을 대입하고 그것을 money_spent라고 명명함
+  SELECT first_name, last_name, IFNULL(SUM(amount), 0) AS money_spent FROM customers
+  LEFT JOIN orders ON customers.id = orders.customer_id
+  GROUP BY first_name , last_name;
+  ```
+
+- Right Join
+
+  `LEFT JOIN`과 반대로 오른쪽에 제시한 테이블의 모든 행을 보여줌
+
+  ```SQL
+  -- customers에 orders를 join하고 orders는 모든 행을 보여줌
+  SELECT first_name, last_name, order_date, amount FROM customers
+  RIGHT JOIN orders ON customers.id = orders.customer_id;
+  ```
+
+- CASCADE
+
+  `ON DELETE CASCADE`를 설정해주면 참조하고 있는 외래키가 삭제된다면 같이 삭제됨
+
+  ```SQL
+  -- customers와 orders 테이블을 생성하고 orders의 customer_id는 customers 테이블의 id를 참조하는 외래키로 설정 후 customers가 삭제되면 orders 테이블의 행도 삭제되도록 ON DELETE CASCADE 설정
+  CREATE TABLE customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(50)
+  );
+  CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_date DATE,
+    amount DECIMAL(8 , 2 ),
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE
+  );
+  ```
