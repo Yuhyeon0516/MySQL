@@ -500,19 +500,19 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
 
 - ORDER BY
 
-  `ORDER BY`는 기본적으로 ASCENDING 즉 내림차순으로 되어있음.
+  `ORDER BY`는 기본적으로 ASCENDING 즉 오름차순으로 되어있음.
 
   ```SQL
-  -- books 테이블의 행을 author_lname의 내림차순으로 정렬 후 선택
-  SELECT * FROM books
-  ORDER BY author_lname;
   -- books 테이블의 행을 author_lname의 오름차순으로 정렬 후 선택
   SELECT * FROM books
+  ORDER BY author_lname;
+  -- books 테이블의 행을 author_lname의 내림차순으로 정렬 후 선택
+  SELECT * FROM books
   ORDER BY author_lname DESC;
-  -- books 테이블의 행을 released_year의 내림차순으로 정렬 후 선택
+  -- books 테이블의 행을 released_year의 오름차순으로 정렬 후 선택
   SELECT * FROM books
   ORDER BY released_year;
-  -- books 테이블의 book_id, author_fname, author_lname, pages를 선택 후 2번째 선택한 author_fname을 기준으로 오름차순 정렬
+  -- books 테이블의 book_id, author_fname, author_lname, pages를 선택 후 2번째 선택한 author_fname을 기준으로 내림차순 정렬
   SELECT book_id, author_fname, author_lname, pages FROM books
   ORDER BY 2 DESC;
   -- books 테이블의 book_id, author_fname, author_lname, pages를 선택 후 author_lname을 기준으로 정렬 후 author_fname을 기준으로 다시 정렬
@@ -531,11 +531,11 @@ https://dev.mysql.com/doc/refman/8.3/en/string-functions.html
   -- books 테이블의 전체 행을 1개 반환
   SELECT * FROM books
   LIMIT 1;
-  -- books 테이블의 title, released_year 행을 released_year을 기준으로 오름차순 정렬 후 5개를 반환
+  -- books 테이블의 title, released_year 행을 released_year을 기준으로 내림차순 정렬 후 5개를 반환
   SELECT title, released_year FROM books
   ORDER BY released_year DESC
   LIMIT 5;
-  -- books 테이블의 title, released_year 행을 released_year을 기준으로 오름차순 정렬 후 0번째부터 5개를 반환
+  -- books 테이블의 title, released_year 행을 released_year을 기준으로 내림차순 정렬 후 0번째부터 5개를 반환
   SELECT title, released_year FROM books
   ORDER BY released_year DESC
   LIMIT 0,5;
@@ -600,7 +600,7 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
   -- books 테이블의 author_lname을 기준으로 그룹화하고 author_lname과 해당 author_lname 그룹의 개수를 선택
   SELECT author_lname, COUNT(*) FROM books
   GROUP BY author_lname;
-  -- books 테이블의 author_lname을 기준으로 그룹화 하고 author_lname과 해당 author_lname의 개수를 선택하고 author_lname의 개수는 books_written으로 명명하고, books_written을 오름차순 기준으로 정렬
+  -- books 테이블의 author_lname을 기준으로 그룹화 하고 author_lname과 해당 author_lname의 개수를 선택하고 author_lname의 개수는 books_written으로 명명하고, books_written을 내림차순 기준으로 정렬
   SELECT author_lname, COUNT(*) AS books_written FROM books
   GROUP BY author_lname
   ORDER BY books_written DESC;
@@ -920,7 +920,7 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
     DROP CONSTRAINT positive_pprice;
     ```
 
-## 일대다(One To Many & Joins)
+## Relation & Join
 
 - 외래키(Foreign Key)
 
@@ -963,7 +963,7 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
   -- 위와 같은 결과에 원하는 결과만 선택하여 확인
   SELECT first_name, last_name, order_date, amount FROM customers
   JOIN orders ON orders.customer_id = customers.id;
-  -- customers 테이블에 orders를 join 하고 first_name, last_name을 기준으로 그룹화하고 amount의 합계인 total을 기준으로 내림차순 정렬
+  -- customers 테이블에 orders를 join 하고 first_name, last_name을 기준으로 그룹화하고 amount의 합계인 total을 기준으로 오름차순 정렬
   SELECT first_name, last_name, SUM(amount) AS total FROM customers
   JOIN orders ON orders.customer_id = customers.id
   GROUP BY first_name , last_name
@@ -1017,3 +1017,108 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
     FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE
   );
   ```
+
+## 뷰, 모드 등 MySQL의 다양한 기능
+
+- View
+
+  결과를 반환하는 쿼리를 저장하고 가상의 테이블을 생성함.  
+  그러나 업데이트, 삭제, 삽입 같은 것은 할 수 없고 상황에 따라 다르지만 쉽게 말하면 조회만 가능하다고 생각하면 될거 같음.  
+  자세한 내용은 아래 링크를 참고.  
+  https://dev.mysql.com/doc/refman/8.3/en/view-updatability.html
+
+  ```SQL
+  -- full_reviews라는 view에 아래 쿼리를 테이블화 하여 저장함
+  CREATE VIEW full_reviews AS
+  SELECT title, released_year, genre, rating, first_name, last_name FROM reviews
+  JOIN series ON series.id = reviews.series_id
+  JOIN reviewers ON reviewers.id = reviews.reviewer_id;
+  -- 위에 저장해놓은 full_reviews를 테이블처럼 사용할 수 있음
+  SELECT * FROM full_reviews;
+  ```
+
+  - 생성한 View를 대체, 변경, 삭제
+
+    ```SQL
+    -- view 생성
+    CREATE VIEW ordered_series AS
+    SELECT * FROM series ORDER BY released_year;
+    -- CREATE OR REPLACE를 이용하여 만약 존재하는 VIEW라면 REPLACE가 동작함
+    CREATE OR REPLACE VIEW ordered_series AS
+    SELECT * FROM series ORDER BY released_year DESC;
+    -- ALTER VIEW를 이용하여 테이블처럼 수정 가능
+    ALTER VIEW ordered_series AS
+    SELECT * FROM series ORDER BY released_year;
+    -- DROP VIEW를 이용하면 삭제 가능
+    DROP VIEW ordered_series;
+    ```
+
+- HAVING
+
+  `GROUP BY`를 사용할 때 조건을 걸어 필터링을 할 수 있음
+
+  ```SQL
+  -- title을 기준으로 그룹화를 진행하는데 rating이 1개보다 많은 것들만 필터링
+  SELECT
+    title,
+    AVG(rating),
+    COUNT(rating) AS review_count
+  FROM full_reviews
+  GROUP BY title HAVING COUNT(rating) > 1;
+  ```
+
+- WITH ROLLUP
+
+  `WITH ROLLUP`을 `GROUP BY`와 같이 사용하면 그룹화 하기전의 이전 테이블에 대한 결과도 확인 할 수 있음
+
+  ```SQL
+  -- WITH ROLLUP을 사용함으로 title로 그룹화하기 전 전체에 대한 rating 평균값도 확인이 가능
+  SELECT title, AVG(rating)
+  FROM full_reviews
+  GROUP BY title WITH ROLLUP;
+  -- WITH ROLLUP을 사용함으로 title로 그룹화하기 전 전체에 대한 rating의 총 개수도 확인이 가능
+  SELECT title, COUNT(rating)
+  FROM full_reviews
+  GROUP BY title WITH ROLLUP;
+  -- WITH ROLLUP을 사용함으로 released_year, genre, first_name으로 그룹화 된 rating의 평균값과 released_year, genre로 그룹화 된 rating의 평균값과 released_year로 그룹화 된 rating의 평균값과 그룹화 전 전체의 rating의 평균값을 확인 가능
+  SELECT released_year, genre, first_name AVG(rating)
+  FROM full_reviews
+  GROUP BY released_year, genre, first_name WITH ROLLUP;
+  ```
+
+- MODE
+
+  현재 적용된 모드에서 하나만 삭제하거나 하는 기능은 없고 적용하고 싶은 모드를 `,`로 구분하여 `SET`해주면 된다.  
+  그리고 수 많은 모드가 존재하는데 필요할때 하기 링크를 참고해서 필요한 것을 찾아서 사용해야겠다.  
+  https://dev.mysql.com/doc/refman/8.3/en/sql-mode.html
+
+  ```SQL
+  -- GLOBAL SQL Mode를 확인
+  SELECT @@GLOBAL.sql_mode;
+  -- 현재 SESSION의 SQL Mode를 확인
+  SELECT @@SESSION.sql_mode;
+  -- GLOBAL SQL Mode를 변경
+  SET GLOBAL sql_mode = 'modes';
+  -- 현재 SESSION의 SQL Mode를 변경
+  SET SESSION sql_mode = 'modes';
+  ```
+
+  - STRICT_TRANS_TABLES
+
+    유효하지 않은 값을 컬럼에 삽입하려 할 때(INT에 STRING을 넣거나 하는 경우) 에러를 발생시키는 Mode
+
+  - ONLY_FULL_GROUP_BY
+
+    `GROUP BY`로 집계되지 않은 컬럼을 호출하지 못함
+
+    ```SQL
+    -- ONLY_FULL_GROUP_BY mode로 설정되어있다면 아래 쿼리를 동작시킬때 rating은 집계되지 않았다고 에러를 발생시킴
+    SELECT title, rating FROM series
+    JOIN reviews ON reviews.series_id = series.id
+    GROUP BY title;
+    ```
+
+  - NO_ZERO_IN_DATE
+
+    날짜의 형식에 0이 들어갈 수 없게 만드는 mode.  
+    2024-01-00와 같은 형식이 입력되면 에러가 발생함
