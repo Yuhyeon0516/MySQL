@@ -1372,3 +1372,85 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
       PRIMARY KEY(photo_id, tag_id)
     );
     ```
+
+- 가상의 데이터를 활용하여 실습
+
+  `instagram_clone_data.sql` 데이터를 활용
+
+  - 가장 오래된 사용자 5명 찾기
+
+    ```SQL
+    SELECT * FROM users
+    ORDER BY created_at
+    LIMIT 5;
+    ```
+
+  - 회원가입이 가장 많이 된 요일 찾기
+
+    ```SQL
+    SELECT
+      DAYNAME(created_at) AS day,
+      COUNT(*) AS total
+    FROM users
+    GROUP BY day
+    ORDER BY total DESC
+    LIMIT 1;
+    ```
+
+  - 사진을 게시한적 없는 사용자 찾기
+
+    ```SQL
+    SELECT users.id, username FROM users
+    LEFT JOIN photos ON photos.user_id = users.id
+    WHERE photos.id IS NULL;
+    ```
+
+  - 가장 좋아요를 많이 받은 사진 찾기
+
+    ```SQL
+    SELECT
+      photo_id,
+      image_url,
+      COUNT(*) AS photo_like_count
+    FROM likes
+    JOIN photos ON likes.photo_id = photos.id
+    GROUP BY photo_id
+    ORDER BY photo_like_count DESC
+    LIMIT 1;
+    ```
+
+  - 회원들이 평균적으로 몇개의 사진을 게시하는지 찾기
+
+    ```SQL
+    -- 총 사진 수를 총 회원수로 나누기
+    SELECT
+    (
+      (SELECT COUNT(*) FROM photos) / (SELECT COUNT(*) FROM users)
+    ) AS avg;
+    ```
+
+  - 가장 많이 사용되는 5개의 해쉬태그 찾기
+
+    ```SQL
+    SELECT
+      tag_name,
+      COUNT(*) AS tag_count
+    FROM photo_tags
+    JOIN tags ON photo_tags.tag_id = tags.id
+    GROUP BY tag_id
+    ORDER BY tag_count DESC
+    LIMIT 5;
+    ```
+
+  - 봇 검열을 위해 모든 사진에 좋아요를 누른 회원을 찾기
+
+    ```SQL
+    SELECT
+      user_id,
+      username,
+      COUNT(*) AS likes_count
+    FROM users
+    JOIN likes ON users.id = likes.user_id
+    GROUP BY likes.user_id
+    HAVING likes_count = (SELECT COUNT(*) FROM photos);
+    ```
