@@ -1270,3 +1270,105 @@ https://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html
     salary - LAG(salary) OVER(PARTITION BY department ORDER BY salary DESC) as dept_salary_diff
   FROM employees;
   ```
+
+## Instagram DB Clone
+
+- Schema Design
+
+  - Database 생성
+
+    ```SQL
+    CREATE DATABASE instagram_clone;
+    USE instagram_clone;
+    ```
+
+  - Users
+
+    ```SQL
+    CREATE TABLE users (
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      username VARCHAR(255) UNIQUE NOT NULL,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+    ```
+
+  - Photos
+
+    ```SQL
+    CREATE TABLE photos (
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      image_url VARCHAR(255) NOT NULL,
+      user_id INT NOT NULL,
+      FOREIGN KEY(user_id) REFERENCES users(id)
+      created_at TIMESTAMP DEFAULT NOW(),
+    );
+    ```
+
+  - Comments
+
+    ```SQL
+    CREATE TABLE comments (
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      comment_text VARCHAR(255) NOT NULL,
+      user_id INT NOT NULL,
+      FOREIGN KEY(user_id) REFERENCES users(id),
+      photo_id INT NOT NULL,
+      FOREIGN KEY(photo_id) REFERENCES photos(id),
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+    ```
+
+  - Likes
+
+    ```SQL
+    CREATE TABLE likes (
+      user_id INT NOT NULL,
+      FOREIGN KEY(user_id) REFERENCES users(id),
+      photo_id INT NOT NULL,
+      FOREIGN KEY(photo_id) REFERENCES photos(id),
+      created_at TIMESTAMP DEFAULT NOW(),
+      -- 같은 유저가 같은 게시물을 두번 좋아요 누를 수 없기 때문에 user_id, photo_id의 조합을 priamry key로 선언
+      PRIMARY KEY(user_id, photo_id)
+    );
+    ```
+
+  - Followers
+
+    ```SQL
+    CREATE TABLE follows(
+      follower_id INT NOT NULL,
+      FOREIGN KEY(follower_id) REFERENCES users(id),
+      followee_id INT NOT NULL,
+      FOREIGN KEY(followee_id) REFERENCES users(id),
+      created_at TIMESTAMP DEFAULT NOW(),
+      PRIMARY KEY(follower_id, followee_id)
+    );
+    ```
+
+  - HashTag
+
+    해쉬태그를 설계하는 방법은 꽤나 다양할 것으로 생각된다.  
+    일단 현재 생각나는 것은 3개 정도이다.
+
+    1. photos 테이블에 tags 컬럼을 추가하는 방법.
+    2. tags 테이블을 새로 만들어 tag_name과 photo_id로 relation을 연결하는 방법.
+    3. tags 테이블을 새로 만들어 tag_name만 관리하고 photo_tags 테이블을 만들어 photo와 tag 모두 relation으로 연결하는 방법.
+
+    아무래도 3번이 사용하기에 제일 적당해 보인다.(제일 구현도가 복잡하긴함)
+
+    ```SQL
+    CREATE TABLE tags(
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      tag_name VARCHAR(255) UNIQUE,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+
+    CREATE TABLE photo_tags(
+      photo_id INT NOT NULL,
+      FOREIGN KEY(photo_id) REFERENCES photos(id),
+      tag_id INT NOT NULL,
+      FOREIGN KEY(tag_id) REFERENCES tags(id),
+      -- 1개의 photo에 같은 tag가 작성될 수 없기에
+      PRIMARY KEY(photo_id, tag_id)
+    );
+    ```
